@@ -1,0 +1,105 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+
+    <f:view contentType="text/html">
+        <h:head>
+            <f:facet name="first">
+                <meta content='text/html; charset=UTF-8' http-equiv="Content-Type"/>
+                <title>PrimeFaces</title>
+            </f:facet>
+        </h:head>
+
+        <h:body>
+
+            <div class="row">
+                <div class="col-sm-4"></div>
+                <div class="col-sm-4">
+                    <h:form id="frm">
+                        <p:outputLabel for="nombre" value="Nombre :" />
+                        <p:inputText id="nombre" value="#{carroBean.carro.nombre}" required="true" label="Nombre"> </p:inputText>
+                        <br/>
+
+                        <p:outputLabel for="marcas" value="Marcas: " />
+                        <p:selectOneMenu id="marcas" value="#{carroBean.carro.marca}">
+
+                            <f:selectItems value="#{carroBean.marcasmenu}" />
+                        </p:selectOneMenu>
+                        <br/>
+                        <p:outputLabel for="modelo" value="Modelo" />
+                        <p:spinner id="modelo" value="#{carroBean.carro.modelo}" label="modelo" required="true" min="1900" max="2019" >
+
+                        </p:spinner>
+                        <br/>
+
+
+                        <p:commandButton value="Agregar" actionListener="#{carroBean.agregarCarro()}" update="paneltabla" />
+                        <br/>
+                        <br/>   
+                        <br/>
+                        
+                        <h:panelGroup id="paneltabla">
+
+                            <p:dataTable id="tablacarros" var="carro" value="#{carroBean.listacarros}" rendered="#{carroBean.listacarros.size()>0 eq true}"  rows="5" paginator="true" editable="true">
+                                <p:ajax event="rowEdit" listener="#{carroBean.actualizar}" update="tablacarros"/>
+                                <p:ajax event="rowEditCancel" listener="#{carroBean.cancelar}" update="tablacarros"/>
+
+                                <p:column headerText="Nombre" filterBy="#{carro.nombre}" filterMatchMode="contains">
+                                    <p:cellEditor>
+                                        <f:facet name="output">
+                                            <h:outputText value="#{carro.nombre}"/>
+
+                                        </f:facet>
+                                        <f:facet name="input">
+                                            <h:inputText value="#{carroBean.nombre}"/>
+                                        </f:facet>
+                                    </p:cellEditor>
+
+                                </p:column>
+
+                                <p:column headerText="Marca" filterBy="#{carro.marca}" filterMatchMode="contains">
+                                    <p:cellEditor>
+                                        <f:facet name="output">
+                                            <h:outputText value="#{carro.marca}" />
+                                        </f:facet>
+                                        <f:facet name="input">
+                                            <p:selectOneMenu  value="#{carroBean.marca}">
+                                                <f:selectItems value="#{carroBean.marcasmenu}" />
+                                            </p:selectOneMenu>
+
+                                        </f:facet>
+                                    </p:cellEditor>
+                                </p:column>
+
+                                <p:column headerText="Modelo" filterBy="#{carro.modelo}" filterMatchMode="contains">
+                                    <p:cellEditor>
+                                        <f:facet name="output">
+                                            <h:outputText value="#{carro.modelo}" />
+                                        </f:facet>
+                                        <f:facet name="input">
+                                            <h:inputText value="#{carroBean.modelo}"/>
+                                        </f:facet>
+                                    </p:cellEditor>
+
+                                </p:column>
+                                <p:column>
+                                    <h:commandLink value="Eliminar" actionListener="#{carroBean.eliminarCarro(carro)}"/>
+                                </p:column>
+                                <p:column>
+                                    <p:rowEditor/>
+                                </p:column>
+                            </p:dataTable>
+                        </h:panelGroup>
+                    </h:form>
+                </div>
+                <div class="col-sm-4"></div>
+            </div>
+
+        </h:body>
+
+    </f:view>
+</html>
+
